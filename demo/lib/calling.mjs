@@ -46,6 +46,7 @@ export function setTransport(websocketUrl) {
 
 export function setAccount(user, password, realm) {
   const uri = `sip:${user}@${realm}`;
+  console.log('🚀 ~ file: calling.mjs ~ line 49 ~ setAccount ~ uri', uri);
   account = {
     user,
     password,
@@ -175,8 +176,12 @@ export function sessionRejected(session) {
 }
 
 export async function invite(phoneNumber) {
+  console.log('🚀 ~ file: calling.mjs ~ line 179 ~ invite ~ phoneNumber', phoneNumber);
   try {
-    const session = await client.invite(`sip:${phoneNumber}@voipgrid.nl`).catch(logger.error);
+    const session = await client
+      .invite(`sip:${phoneNumber}@pbx.dynopii.com`)
+      .catch(err => console.log('test err', err));
+    console.log('🚀 ~ file: calling.mjs ~ line 182 ~ invite ~ session', session);
 
     if (!session) {
       return;
@@ -195,10 +200,10 @@ export async function invite(phoneNumber) {
       callingEvents.dispatchEvent(new CustomEvent('sessionUpdate', { detail: session }));
     });
 
-    session.terminated().finally(() => {
-      logger.info('outgoing call was terminated', session.id);
-      callingEvents.dispatchEvent(new CustomEvent('sessionUpdate', { detail: session }));
-    });
+    // session.terminated().finally(() => {
+    //   logger.info('outgoing call was terminated', session.id);
+    //   callingEvents.dispatchEvent(new CustomEvent('sessionUpdate', { detail: session }));
+    // });
 
     session.on('callQualityUpdate', (sessionId, stats) => {
       const { mos } = stats;
@@ -207,6 +212,7 @@ export async function invite(phoneNumber) {
 
     return session;
   } catch (e) {
+    console.log('aaa');
     logger.error(e);
   }
 }
