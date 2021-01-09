@@ -45,7 +45,7 @@ export function setTransport(websocketUrl) {
 }
 
 export function setAccount(user, password, realm) {
-  const uri = `sip:${user}@${realm}`;
+  const uri = `sip:${user}@${realm}:5160`;
   console.log('🚀 ~ file: calling.mjs ~ line 49 ~ setAccount ~ uri', uri);
   account = {
     user,
@@ -179,7 +179,7 @@ export async function invite(phoneNumber) {
   console.log('🚀 ~ file: calling.mjs ~ line 179 ~ invite ~ phoneNumber', phoneNumber);
   try {
     const session = await client
-      .invite(`sip:${phoneNumber}@pbx.dynopii.com`)
+      .invite(`sip:${phoneNumber}@pbx.dynopii.com:5160`)
       .catch(err => console.log('test err', err));
     console.log('🚀 ~ file: calling.mjs ~ line 182 ~ invite ~ session', session);
 
